@@ -20,7 +20,6 @@
     <?php if (count($alunos) > 0): ?>
         <table border="1" cellpadding="5" cellspacing="0">
             <tr>
-                <th>ID</th>
                 <th>Nome</th>
                 <th>Idade</th>
                 <th>Nota</th>
@@ -28,10 +27,11 @@
 
             <?php foreach ($alunos as $aluno): ?>
                 <tr>
-                    <td><?= htmlspecialchars($aluno['id']) ?></td>
                     <td><?= htmlspecialchars($aluno['nome']) ?></td>
                     <td><?= htmlspecialchars($aluno['idade']) ?></td>
                     <td><?= htmlspecialchars($aluno['nota']) ?></td>
+                    <td><a href='editar.php?id=<?= $aluno['id'] ?>'>✏️ Editar</a></td>
+                    <td><a href='excluir.php?id=<?= $aluno['id']?>' onclick="return confirm('Tem certeza que deseja excluir essa tupla?')">🗑️ Excluir</a></td>
                 </tr>
             <?php endforeach; ?>
         </table>
