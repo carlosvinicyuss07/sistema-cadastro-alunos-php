@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
         if ($stmt->rowCount() > 0) {
             echo "<p>Aluno cadastrado com sucesso.</p>";
-            echo "<p><a href='index.php'><- Voltar para o cadastro</a></p>";
+            echo "<p><a href='cadastro.php'><- Voltar para o cadastro</a></p>";
             echo "<p><a href='listar.php'>📋 Ver lista de alunos</a></p>";
         }
     }

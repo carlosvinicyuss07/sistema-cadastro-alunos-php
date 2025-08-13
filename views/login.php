@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($usuarioEncontrado) {
         if (password_verify($senha, $usuarioEncontrado['senha'])) {
             $_SESSION['usuario'] = $usuarioEncontrado['usuario'];
-            header('Location: index.php');
+            header('Location: cadastro.php');
             exit;
         }
     }

@@ -44,6 +44,6 @@ require_once("verifica_login.php");
         <p>Nenhum aluno cadastrado.</p>
     <?php endif; ?>
 
-    <p><a href="index.php"><- Voltar para cadastro</a></p>
+    <p><a href="cadastro.php"><- Voltar para cadastro</a></p>
 </body>
 </html>
