@@ -1,3 +1,8 @@
+<?php
+
+require_once("verifica_login.php");
+
+?>
 <!doctype html>
 <html lang="pt-br">
 <head>

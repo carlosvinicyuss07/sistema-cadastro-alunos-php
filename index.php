@@ -1,3 +1,7 @@
+<?php
+    require_once "verifica_login.php";
+?>
+
 <!doctype html>
 <html lang="pt-br">
 <head>
@@ -21,6 +25,7 @@
                 <button type="submit">Cadastrar</button>
             </form>
             <p><a href='listar.php'>📋 Ver lista de alunos</a></p>
+            <p><a href='logout.php'>🚪 Encerrar sessão</a></p>
     </section>
 </body>
 </html>
