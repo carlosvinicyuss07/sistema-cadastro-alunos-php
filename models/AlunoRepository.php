@@ -11,14 +11,14 @@ class AlunoRepository {
         $this->pdo = $pdo;
     }
 
-    public function listarTodos() {
+    public function listarTodos(): array {
         $sql = "SELECT * FROM alunos ORDER BY nome";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function buscarPorId($id) {
+    public function buscarPorId($id): array {
         $sql = "SELECT * FROM alunos WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(":id", $id);
@@ -26,8 +26,9 @@ class AlunoRepository {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function inserir($nome, $idade, $nota) {
+    public function inserir($nome, $idade, $nota): bool {
         if (!($nota >= 0 && $nota <= 10)) {
+            // corrigir (remover HTML do repository)
             echo "<p>ERRO! Valor da nota fora do limite permitido.</p>";
         } else {
             $sql = "INSERT INTO alunos (nome, idade, nota) VALUES (:nome, :idade, :nota)";
@@ -38,9 +39,10 @@ class AlunoRepository {
                 ':nota' => $nota
             ]);
         }
+        return false;
     }
 
-    public function atualizar($id, $nome, $idade, $nota) {
+    public function atualizar($id, $nome, $idade, $nota): bool {
         $sql = "UPDATE alunos SET nome = :nome, idade = :idade, nota = :nota
                 WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
@@ -52,10 +54,13 @@ class AlunoRepository {
         ]);
     }
 
-    public function excluir($id): void {
+    public function excluir($id): bool {
         $sql = "DELETE FROM alunos WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(":id", $id);
-        $stmt->execute();
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
     }
 }

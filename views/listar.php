@@ -36,7 +36,7 @@ if (!isset($alunos)) {
             <td>
                 <a href="index.php?page=alunos&action=editar&id=<?= $aluno['id'] ?>">Editar</a>
                 <a href="index.php?page=alunos&action=excluir&id=<?= $aluno['id'] ?>"
-                   onclick="return confirm('Tem certeza?')">Excluir</a>
+                   onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
             </td>
         </tr>
     <?php endforeach; ?>

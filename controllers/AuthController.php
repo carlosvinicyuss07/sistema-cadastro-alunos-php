@@ -1,12 +1,12 @@
 <?php
 class AuthController {
-    private $pdo;
+    private PDO $pdo;
 
     public function __construct($pdo) {
         $this->pdo = $pdo;
     }
 
-    public function login() {
+    public function login(): void {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuario = $_POST['usuario'] ?? '';
             $senha = $_POST['senha'] ?? '';
@@ -53,14 +53,14 @@ class AuthController {
         }
     }
 
-    public function logout() {
+    public function logout(): void {
         session_unset();
         session_destroy();
         header('Location: index.php');
         exit;
     }
 
-    public function cadastrarUsuario($usuario, $senha) {
+    public function cadastrarUsuario($usuario, $senha): bool {
         $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
         $sql = "INSERT INTO usuarios (usuario, senha) VALUES (?, ?)";
@@ -68,7 +68,7 @@ class AuthController {
         return $stmt->execute([$usuario, $senhaHash]);
     }
 
-    public function migrarSenhas() {
+    public function migrarSenhas(): void {
         try {
             // Buscar todos os usuários com senhas em texto
             $sql = "SELECT id, usuario, senha FROM usuarios";
