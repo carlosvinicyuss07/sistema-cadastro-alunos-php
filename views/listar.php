@@ -1,49 +1,49 @@
 <?php
 
-require_once("verifica_login.php");
+require_once ("config/conexao.php");
 
+if (!isset($alunos)) {
+    $alunos = [];
+    echo "Não há alunos cadastrados!";
+}
 ?>
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Alunos</title>
 </head>
 <body>
-    <h1>Alunos Cadastrados</h1>
-    <?php
-        require_once "conexao.php";
-        global $pdo;
+<h1>Alunos Cadastrados</h1>
 
-        // realiza a consulta sql
-        $sql = $pdo->query("SELECT * FROM alunos ORDER BY nome ASC");
-        // armazena todos os dados obtidos na query em um array associativo
-        $alunos = $sql->fetchAll(PDO::FETCH_ASSOC);
-    ?>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Nome</th>
+        <th>Idade</th>
+        <th>Nota</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($alunos as $aluno): ?>
+        <tr>
+            <td><?= htmlspecialchars($aluno['nome']) ?></td>
+            <td><?= htmlspecialchars($aluno['idade']) ?></td>
+            <td><?= htmlspecialchars($aluno['nota']) ?></td>
+            <td>
+                <a href="index.php?page=alunos&action=editar&id=<?= $aluno['id'] ?>">Editar</a>
+                <a href="index.php?page=alunos&action=excluir&id=<?= $aluno['id'] ?>"
+                   onclick="return confirm('Tem certeza?')">Excluir</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
 
-    <?php if (count($alunos) > 0): ?>
-        <table border="1" cellpadding="5" cellspacing="0">
-            <tr>
-                <th>Nome</th>
-                <th>Idade</th>
-                <th>Nota</th>
-            </tr>
-
-            <?php foreach ($alunos as $aluno): ?>
-                <tr>
-                    <td><?= htmlspecialchars($aluno['nome']) ?></td>
-                    <td><?= htmlspecialchars($aluno['idade']) ?></td>
-                    <td><?= htmlspecialchars($aluno['nota']) ?></td>
-                    <td><a href='editar.php?id=<?= $aluno['id'] ?>'>✏️ Editar</a></td>
-                    <td><a href='excluir.php?id=<?= $aluno['id']?>' onclick="return confirm('Tem certeza que deseja excluir essa tupla?')">🗑️ Excluir</a></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php else: ?>
-        <p>Nenhum aluno cadastrado.</p>
-    <?php endif; ?>
-
-    <p><a href="cadastro.php"><- Voltar para cadastro</a></p>
+<p><a href="index.php?page=alunos&action=cadastrar">Cadastrar novo aluno</a></p>
+<p><a href="index.php?page=auth&action=logout">Sair</a></p>
 </body>
 </html>

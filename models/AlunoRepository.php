@@ -4,8 +4,8 @@ namespace models;
 
 use PDO;
 
-class Aluno {
-    private $pdo;
+class AlunoRepository {
+    private PDO $pdo;
 
     public function __construct($pdo) {
         $this->pdo = $pdo;
@@ -27,17 +27,22 @@ class Aluno {
     }
 
     public function inserir($nome, $idade, $nota) {
-        $sql = "INSERT INTO alunos (nome, idade, nota) VALUES (:nome, :idade, :nota)";
-        $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([
-            ':nome' => $nome,
-            ':idade' => $idade,
-            ':nota' => $nota
-        ]);
+        if (!($nota >= 0 && $nota <= 10)) {
+            echo "<p>ERRO! Valor da nota fora do limite permitido.</p>";
+        } else {
+            $sql = "INSERT INTO alunos (nome, idade, nota) VALUES (:nome, :idade, :nota)";
+            $stmt = $this->pdo->prepare($sql);
+            return $stmt->execute([
+                ':nome' => $nome,
+                ':idade' => $idade,
+                ':nota' => $nota
+            ]);
+        }
     }
 
     public function atualizar($id, $nome, $idade, $nota) {
-        $sql = "UPDATE alunos SET nome = :nome, idade = :idade, nota = :nota";
+        $sql = "UPDATE alunos SET nome = :nome, idade = :idade, nota = :nota
+                WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
             ':id' => $id,
@@ -47,7 +52,7 @@ class Aluno {
         ]);
     }
 
-    public function excluir($id) {
+    public function excluir($id): void {
         $sql = "DELETE FROM alunos WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(":id", $id);

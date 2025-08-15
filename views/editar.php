@@ -1,7 +1,7 @@
 <?php
 
-require_once "verifica_login.php";
-require_once "conexao.php";
+require_once "auth/verifica_login.php";
+require_once "config/conexao.php";
 global $pdo;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
