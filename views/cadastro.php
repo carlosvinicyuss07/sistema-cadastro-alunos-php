@@ -25,7 +25,7 @@
     <button type="submit"><?= isset($aluno) ? 'Atualizar' : 'Cadastrar' ?></button>
 </form>
 
-<p><a href="index.php?page=alunos&action=listar">Ver lista de alunos</a></p>
-<p><a href="index.php?page=auth&action=logout">Sair</a></p>
+<p><a href="<?=BASE_URL?>alunos/listar">Ver lista de alunos</a></p>
+<p><a href="<?=BASE_URL?>auth/logout">Sair</a></p>
 </body>
 </html>

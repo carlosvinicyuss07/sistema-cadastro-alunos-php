@@ -33,7 +33,7 @@ class AuthController {
                         $_SESSION['usuario'] = $user['usuario'];
 
                         // Redirecionar para lista de alunos
-                        header('Location: index.php?page=alunos&action=listar');
+                        header("Location: " . BASE_URL . "alunos/listar");
                         exit;
                     } else {
                         $erro = "Usuário ou senha incorretos";
@@ -56,7 +56,7 @@ class AuthController {
     public function logout(): void {
         session_unset();
         session_destroy();
-        header('Location: index.php');
+        header('Location: login');
         exit;
     }
 

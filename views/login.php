@@ -12,7 +12,7 @@
     <p style="color: red;"><?= $erro ?></p>
 <?php endif; ?>
 
-<form method="POST" action="index.php?page=auth&action=login">
+<form method="POST" action="<?= BASE_URL?>auth/login">
     <label>Usuário:</label>
     <input type="text" name="usuario" required><br><br>
 

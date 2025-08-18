@@ -2,6 +2,8 @@
 global $pdo;
 session_start();
 
+define("BASE_URL", "http://localhost/sistema-cadastro-alunos/");
+
 require_once 'config/conexao.php';
 require_once 'controllers/AuthController.php';
 require_once 'controllers/AlunoController.php';
@@ -46,7 +48,7 @@ switch ($page) {
     default:
         // Página de login
         if (isset($_SESSION['user_id'])) {
-            header('Location: index.php?page=alunos&action=listar');
+            header("Location: " . BASE_URL . "alunos/listar");
         } else {
             include 'views/login.php';
         }

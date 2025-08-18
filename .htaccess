@@ -1,0 +1,9 @@
+RewriteEngine On
+RewriteBase /sistema-cadastro-alunos/
+
+RewriteCond %{REQUEST_FILENAME}% !-f
+RewriteCond %{REQUEST_FILENAME}% !-d
+
+# Regras
+RewriteRule ^([^/]+)/([^/]+)/?$ index.php?page=$1&action=$2 [L,QSA]
+RewriteRule ^([^/]+)/([^/]+)/([0-9]+)/?$ index.php?page=$1&action=$2&id=$3 [L]

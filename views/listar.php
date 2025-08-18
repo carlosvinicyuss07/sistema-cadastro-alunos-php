@@ -34,8 +34,8 @@ if (!isset($alunos)) {
             <td><?= htmlspecialchars($aluno['idade']) ?></td>
             <td><?= htmlspecialchars($aluno['nota']) ?></td>
             <td>
-                <a href="index.php?page=alunos&action=editar&id=<?= $aluno['id'] ?>">Editar</a>
-                <a href="index.php?page=alunos&action=excluir&id=<?= $aluno['id'] ?>"
+                <a href="editar/<?= $aluno['id'] ?>">Editar</a>
+                <a href="excluir/<?= $aluno['id'] ?>"
                    onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
             </td>
         </tr>
@@ -43,7 +43,7 @@ if (!isset($alunos)) {
     </tbody>
 </table>
 
-<p><a href="index.php?page=alunos&action=cadastrar">Cadastrar novo aluno</a></p>
-<p><a href="index.php?page=auth&action=logout">Sair</a></p>
+<p><a href="<?=BASE_URL?>alunos/cadastrar">Cadastrar novo aluno</a></p>
+<p><a href="<?=BASE_URL?>auth/logout">Sair</a></p>
 </body>
 </html>

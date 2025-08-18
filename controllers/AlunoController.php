@@ -24,8 +24,7 @@ class AlunoController {
             $nota = $_POST['nota'] ?? '';
 
             if ($this->alunoRepository->inserir($nome, $idade, $nota)) {
-                header('Location: index.php?page=alunos&action=listar');
-                exit;
+                header("Location: " . BASE_URL . "alunos/listar");
             } else {
                 $erro = "Erro ao cadastrar aluno";
             }
@@ -55,10 +54,10 @@ class AlunoController {
 
     public function excluir($id) {
         if ($this->alunoRepository->excluir($id)) {
-            header('Location: index.php?page=alunos&action=listar');
+            header("Location: " . BASE_URL . "alunos/listar");
         } else {
             // Tratar erro
-            header('Location: index.php?page=alunos&action=listar');
+            header("Location: " . BASE_URL . "alunos/listar");
         }
         exit;
     }
