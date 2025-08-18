@@ -3,6 +3,7 @@
 namespace models;
 
 use PDO;
+use PDOException;
 
 class AlunoRepository {
     private PDO $pdo;
@@ -58,9 +59,9 @@ class AlunoRepository {
         $sql = "DELETE FROM alunos WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(":id", $id);
-        if ($stmt->execute()) {
-            return true;
+        if (!$stmt->execute()) {
+            throw new PDOException("Erro ao excluir aluno");
         }
-        return false;
+        return true;
     }
 }

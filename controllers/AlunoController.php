@@ -42,10 +42,10 @@ class AlunoController {
             $nota = $_POST['nota'] ?? '';
 
             if ($this->alunoRepository->atualizar($id, $nome, $idade, $nota)) {
-                header('Location: index.php?page=alunos&action=listar');
+                header("Location: " . BASE_URL . "alunos/listar");
                 exit;
             } else {
-                $erro = "Erro ao atualizar aluno";
+                throw new PDOException("Erro ao atualizar aluno");
             }
         }
 
@@ -53,12 +53,8 @@ class AlunoController {
     }
 
     public function excluir($id) {
-        if ($this->alunoRepository->excluir($id)) {
-            header("Location: " . BASE_URL . "alunos/listar");
-        } else {
-            // Tratar erro
-            header("Location: " . BASE_URL . "alunos/listar");
-        }
+        $this->alunoRepository->excluir($id);
+        header("Location: " . BASE_URL . "alunos/listar");
         exit;
     }
 }
