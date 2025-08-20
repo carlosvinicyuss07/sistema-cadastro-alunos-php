@@ -14,13 +14,13 @@
 
 <form method="POST">
     <label>Nome:</label>
-    <input type="text" name="nome" value="<?= $aluno['nome'] ?? '' ?>" required><br><br>
+    <input type="text" name="nome" value="<?= isset($aluno) ? $aluno->getNome() : '' ?>" required><br><br>
 
     <label>Idade:</label>
-    <input type="number" name="idade" value="<?= $aluno['idade'] ?? '' ?>" required><br><br>
+    <input type="number" name="idade" value="<?= isset($aluno) ? $aluno->getIdade() : '' ?>" required><br><br>
 
     <label>Nota:</label>
-    <input type="number" step="0.1" name="nota" value="<?= $aluno['nota'] ?? '' ?>" required><br><br>
+    <input type="number" step="0.1" name="nota" value="<?= isset($aluno) ? $aluno->getNota() : '' ?>" required><br><br>
 
     <button type="submit"><?= isset($aluno) ? 'Atualizar' : 'Cadastrar' ?></button>
 </form>

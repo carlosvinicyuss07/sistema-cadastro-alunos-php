@@ -2,6 +2,8 @@
 
 namespace models;
 
+require_once __DIR__ . '/Aluno.php';
+
 use PDO;
 use PDOException;
 
@@ -13,55 +15,78 @@ class AlunoRepository {
     }
 
     public function listarTodos(): array {
-        $sql = "SELECT * FROM alunos ORDER BY nome";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $this->pdo->query("SELECT * FROM alunos ORDER BY nome");
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($dados)) {
+            return [];
+        }
+        return $dados;
     }
 
-    public function buscarPorId($id): array {
-        $sql = "SELECT * FROM alunos WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(":id", $id);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    public function buscarPorId($id): ?Aluno {
+        $stmt = $this->pdo->prepare("SELECT * FROM alunos WHERE id = ?");
+        $stmt->execute([$id]);
+        $dado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($dado) {
+            return new Aluno($dado['nome'], $dado['idade'], $dado['nota'], $dado['id']);
+        }
+        return null;
     }
 
-    public function inserir($nome, $idade, $nota): bool {
-        if (!($nota >= 0 && $nota <= 10)) {
-            // corrigir (remover HTML do repository)
-            echo "<p>ERRO! Valor da nota fora do limite permitido.</p>";
-        } else {
-            $sql = "INSERT INTO alunos (nome, idade, nota) VALUES (:nome, :idade, :nota)";
-            $stmt = $this->pdo->prepare($sql);
-            return $stmt->execute([
-                ':nome' => $nome,
-                ':idade' => $idade,
-                ':nota' => $nota
+    public function inserir(Aluno $aluno): bool {
+        try {
+            $this->pdo->beginTransaction();
+
+            $stmt = $this->pdo->prepare("INSERT INTO alunos (nome, idade, nota) VALUES (?, ?, ?)");
+            $stmt->execute([
+                $aluno->getNome(),
+                $aluno->getIdade(),
+                $aluno->getNota()
             ]);
+
+            $this->pdo->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            throw $e;
         }
-        return false;
     }
 
-    public function atualizar($id, $nome, $idade, $nota): bool {
-        $sql = "UPDATE alunos SET nome = :nome, idade = :idade, nota = :nota
-                WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([
-            ':id' => $id,
-            ':nome' => $nome,
-            ':idade' => $idade,
-            ':nota' => $nota
-        ]);
+    public function atualizar(Aluno $aluno): bool {
+        try {
+            $this->pdo->beginTransaction();
+
+            $stmt = $this->pdo->prepare("UPDATE alunos SET nome=?, idade=?, nota=? WHERE id=?");
+            $stmt->execute([
+                $aluno->getNome(),
+                $aluno->getIdade(),
+                $aluno->getNota(),
+                $aluno->getId()
+            ]);
+
+            $this->pdo->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
     }
 
-    public function excluir($id): bool {
-        $sql = "DELETE FROM alunos WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(":id", $id);
-        if (!$stmt->execute()) {
-            throw new PDOException("Erro ao excluir aluno");
+    public function excluir($id): bool
+    {
+        try {
+            $this->pdo->beginTransaction();
+
+            $stmt = $this->pdo->prepare("DELETE FROM alunos WHERE id = ?");
+            $stmt->execute([$id]);
+
+            $this->pdo->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->pdo->rollBack();
+            throw $e;
         }
-        return true;
     }
 }

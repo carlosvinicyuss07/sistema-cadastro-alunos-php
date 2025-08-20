@@ -26,6 +26,11 @@ class Aluno {
         return $this->id;
     }
 
+    public function setId(mixed $id): void
+    {
+        $this->id = $id;
+    }
+
     /**
      * @return mixed
      */
