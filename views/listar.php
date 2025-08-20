@@ -3,7 +3,6 @@
 require_once ("config/conexao.php");
 
 if (!isset($alunos)) {
-    $alunos = [];
     echo "Não há alunos cadastrados!";
 }
 ?>
@@ -16,6 +15,16 @@ if (!isset($alunos)) {
     <title>Lista de Alunos</title>
 </head>
 <body>
+
+<section>
+    <form method="GET" action="<?= BASE_URL ?>alunos/listar">
+        <input type="text" name="nome" placeholder="Buscar por nome">
+        <input type="number" name="idadeMax" placeholder="Idade máxima">
+        <input type="number" step="0.01" name="notaMin" placeholder="Nota mínima">
+        <button type="submit">Filtrar</button>
+    </form>
+</section>
+
 <h1>Alunos Cadastrados</h1>
 
 <table border="1">

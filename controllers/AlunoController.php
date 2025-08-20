@@ -15,7 +15,12 @@ class AlunoController {
     }
 
     public function listar(): void {
-        $alunos = $this->alunoRepository->listarTodos();
+        $nome = $_GET['nome'] ?? null;
+        $idadeMax = isset($_GET['idadeMax']) ? (int)$_GET['idadeMax'] : null;
+        $notaMin = isset($_GET['notaMin']) ? (float)$_GET['notaMin'] : null;
+
+        $alunos = $this->alunoRepository->listarComFiltro($nome, $idadeMax, $notaMin);
+
         include 'views/listar.php';
     }
 

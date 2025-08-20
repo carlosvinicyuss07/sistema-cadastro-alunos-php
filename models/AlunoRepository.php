@@ -89,4 +89,30 @@ class AlunoRepository {
             throw $e;
         }
     }
+
+    public function listarComFiltro(?string $nome = null, ?int $idadeMax = null, ?float $notaMin = null): array {
+        $sql = "SELECT * FROM alunos WHERE 1=1";
+        $params = [];
+
+        if ($nome) {
+            $sql .= " AND nome LIKE ?";
+            $params[] = "%$nome%";
+        }
+
+        if ($idadeMax) {
+            $sql .= " AND idade <= ?";
+            $params[] = $idadeMax;
+        }
+
+        if ($notaMin) {
+            $sql .= " AND nota >= ?";
+            $params[] = $notaMin;
+        }
+
+        $sql .= " ORDER BY nome";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
