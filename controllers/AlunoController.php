@@ -15,11 +15,27 @@ class AlunoController {
     }
 
     public function listar(): void {
+        $paginaAtual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+        $limite = 5;
+        $offset = ($paginaAtual - 1) * $limite;
+
         $nome = $_GET['nome'] ?? null;
         $idadeMax = isset($_GET['idadeMax']) ? (int)$_GET['idadeMax'] : null;
         $notaMin = isset($_GET['notaMin']) ? (float)$_GET['notaMin'] : null;
 
-        $alunos = $this->alunoRepository->listarComFiltro($nome, $idadeMax, $notaMin);
+        $filtros = [
+            'nome' => $_GET['nome'] ?? null,
+            'idadeMin' => $_GET['idadeMin'] ?? null,
+            'idadeMax' => $_GET['idadeMax'] ?? null,
+            'notaMin' => $_GET['notaMin'] ?? null,
+            'notaMax' => $_GET['notaMax'] ?? null,
+        ];
+
+        $alunos = $this->alunoRepository->listarPaginado($limite, $offset, $filtros);
+        $total = $this->alunoRepository->contarAlunos($filtros);
+        $totalPaginas = (ceil($total / $limite) > 0) ? ceil($total / $limite) : 1;
+
+        $queryFiltros = http_build_query($filtros);
 
         include 'views/listar.php';
     }

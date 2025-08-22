@@ -26,8 +26,6 @@ switch ($page) {
         require_once ("auth/verifica_login.php");
 
         if ($action === 'listar') {
-            echo "<h1>Lista de Alunos</h1>";
-            echo "<p>Bem-vindo, " . $_SESSION['usuario'] . "!</p>";
             $alunoController = new AlunoController($pdo);
             $alunoController->listar();
             break;

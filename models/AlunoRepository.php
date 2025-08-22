@@ -90,29 +90,67 @@ class AlunoRepository {
         }
     }
 
-    public function listarComFiltro(?string $nome = null, ?int $idadeMax = null, ?float $notaMin = null): array {
+    public function listarPaginado(int $limite, int $offset, array $filtros = []): array {
         $sql = "SELECT * FROM alunos WHERE 1=1";
         $params = [];
 
-        if ($nome) {
+        if (!empty($filtros['nome'])) {
             $sql .= " AND nome LIKE ?";
-            $params[] = "%$nome%";
+            $params[] = "%" . $filtros['nome'] . "%";
         }
-
-        if ($idadeMax) {
+        if (!empty($filtros['idadeMin'])) {
+            $sql .= " AND idade >= ?";
+            $params[] = (int)$filtros['idadeMin'];
+        }
+        if (!empty($filtros['idadeMax'])) {
             $sql .= " AND idade <= ?";
-            $params[] = $idadeMax;
+            $params[] = (int)$filtros['idadeMax'];
         }
-
-        if ($notaMin) {
+        if (!empty($filtros['notaMin'])) {
             $sql .= " AND nota >= ?";
-            $params[] = $notaMin;
+            $params[] = (float)$filtros['notaMin'];
+        }
+        if (!empty($filtros['notaMax'])) {
+            $sql .= " AND nota <= ?";
+            $params[] = (float)$filtros['notaMax'];
         }
 
-        $sql .= " ORDER BY nome";
+        $sql .= " ORDER BY nome ASC LIMIT $limite OFFSET $offset";
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function contarAlunos(array $filtros = []): int {
+        $sql = "SELECT COUNT(*) as total FROM alunos WHERE 1=1";
+        $params = [];
+
+        if (!empty($filtros['nome'])) {
+            $sql .= " AND nome LIKE ?";
+            $params[] = "%" . $filtros['nome'] . "%";
+        }
+        if (!empty($filtros['idadeMin'])) {
+            $sql .= " AND idade >= ?";
+            $params[] = (int)$filtros['idadeMin'];
+        }
+        if (!empty($filtros['idadeMax'])) {
+            $sql .= " AND idade <= ?";
+            $params[] = (int)$filtros['idadeMax'];
+        }
+        if (!empty($filtros['notaMin'])) {
+            $sql .= " AND nota >= ?";
+            $params[] = (float)$filtros['notaMin'];
+        }
+        if (!empty($filtros['notaMax'])) {
+            $sql .= " AND nota <= ?";
+            $params[] = (float)$filtros['notaMax'];
+        }
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+
+        return (int) $stmt->fetchColumn();
     }
 }

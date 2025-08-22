@@ -2,7 +2,7 @@
 
 require_once ("config/conexao.php");
 
-if (!isset($alunos)) {
+if (empty($alunos)) {
     echo "Não há alunos cadastrados!";
 }
 ?>
@@ -16,11 +16,18 @@ if (!isset($alunos)) {
 </head>
 <body>
 
+<div>
+    <h1>Lista de Alunos</h1>
+    <p>Bem-vindo, <?= $_SESSION['usuario'] ?> !</p>
+</div>
+
 <section>
     <form method="GET" action="<?= BASE_URL ?>alunos/listar">
-        <input type="text" name="nome" placeholder="Buscar por nome">
-        <input type="number" name="idadeMax" placeholder="Idade máxima">
-        <input type="number" step="0.01" name="notaMin" placeholder="Nota mínima">
+        <input type="text" name="nome" value="<?= $_GET['nome'] ?? null?>" placeholder="Buscar por nome">
+        <input type="number" name="idadeMin" value="<?= $_GET['idadeMin'] ?? null?>" placeholder="Idade mínima">
+        <input type="number" name="idadeMax" value="<?= $_GET['idadeMax'] ?? null?>" placeholder="Idade máxima">
+        <input type="number" step="0.01" name="notaMin" value="<?= $_GET['notaMin'] ?? null?>" placeholder="Nota mínima">
+        <input type="number" step="0.01" name="notaMax" value="<?= $_GET['notaMax'] ?? null?>" placeholder="Nota máxima">
         <button type="submit">Filtrar</button>
     </form>
 </section>
@@ -51,6 +58,28 @@ if (!isset($alunos)) {
     <?php endforeach; ?>
     </tbody>
 </table>
+
+<div>
+    <?php if (isset($paginaAtual)) {
+        if ($paginaAtual > 1): ?>
+            <a href="?pagina=<?= $paginaAtual - 1 ?>&<?= $queryFiltros ?? '' ?>">⬅ Anterior</a>
+        <?php endif;
+    } ?>
+
+    <?php if (isset($totalPaginas)) {
+        for ($i = 1; $i <= $totalPaginas; $i++): ?>
+            <?php if ($i == $paginaAtual): ?>
+                <strong>[<?= $i ?>]</strong>
+            <?php else: ?>
+                <a href="?pagina=<?= $i ?>&<?= $queryFiltros ?? '' ?>"><?= $i ?></a>
+            <?php endif; ?>
+        <?php endfor;
+    } ?>
+
+    <?php if ($paginaAtual < $totalPaginas): ?>
+        <a href="?pagina=<?= $paginaAtual + 1 ?>&<?= $queryFiltros ?? '' ?>">Próxima ➡</a>
+    <?php endif; ?>
+</div>
 
 <p><a href="<?=BASE_URL?>alunos/cadastrar">Cadastrar novo aluno</a></p>
 <p><a href="<?=BASE_URL?>auth/logout">Sair</a></p>
